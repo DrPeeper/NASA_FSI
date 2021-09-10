@@ -98,29 +98,17 @@ class Test(unittest.TestCase):
             shortest_dig_dump_pairs, _ = distance_between_pairs_comparison(shortest_dig_dump_pairs, dig_dump_pairs)
             self.assertIsNotNone(shortest_dig_dump_pairs)
 
-        print(shortest_dig_dump_pairs, '\n', self.dig_dump_pairs)
-        distance_1, distance_2 = distance_between_pairs(shortest_dig_dump_pairs, self.dig_dump_pairs)
-        differences = distance_difference(self.dig_dump_pairs)
-        print('-')
-        for a in differences:
-            print(a)
-        print('-')
-        print(distance_1, distance_2)
-        if distance_1 == distance_2:
-            return
-        shortest_dig_dump_pairs, _ = distance_between_pairs_comparison(self.dig_dump_pairs, shortest_dig_dump_pairs)
-        self.assertEqual(self.dig_dump_pairs.keys(), shortest_dig_dump_pairs.keys())
-        for dig_location in self.dig_dump_pairs:
-            shortest_dig_dump_pairs[dig_location].sort()
-            self.dig_dump_pairs[dig_location].sort()
-            self.assertEqual(shortest_dig_dump_pairs[dig_location], self.dig_dump_pairs[dig_location])
-        #self.assertEqual(shortest_dig_dump_pairs, self.dig_dump_pairs)
+        shortest_distance, solution_distance = distance_between_pairs(shortest_dig_dump_pairs, self.dig_dump_pairs)
+        print(f'Shortest distance and solution distance ratio: {solution_distance/shortest_distance}')
+        return solution_distance/shortest_distance
 
     number_of_tests = 1000
     def test(self):
+        average_shortest_solution_distance_ratio = 0
         for _ in range(self.number_of_tests):
             self.init()
             self.level_test()
             self.completion_test()
             self.redundency_and_action_test()
-            self.shortest_path()
+            average_shortest_solution_distance_ratio += self.shortest_path()
+        print(f'Average solution score: {average_shortest_solution_distance_ratio/self.number_of_tests}')
